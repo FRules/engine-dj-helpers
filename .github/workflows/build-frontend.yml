@@ -5,11 +5,12 @@ on:
   pull_request:
     branches: [ main ]
   workflow_dispatch:
+defaults:
+  run:
+    working-directory: spengine/frontend
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      working-directory: spengine/frontend
     steps:
       - name: Git clone the repository
         uses: actions/checkout@v3
