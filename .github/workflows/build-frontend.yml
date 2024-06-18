@@ -8,7 +8,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-      - uses: actions/checkout@v2
+      - name: Git clone the repository
+        uses: actions/checkout@v3
       - name: Change path
         run: cd spengine/frontend
       - name: Cache node modules
