@@ -30,12 +30,14 @@ jobs:
         run: npm i
       - name: Run build command
         run: npm run build
+      - name: List output dir
+        run: ls -la
       - name: Archive production artifacts
         uses: actions/upload-artifact@v4
         with:
           name: dist
           path: |
-            dist
+            ./dist
   deploy:
     runs-on: ubuntu-latest
     needs: build
