@@ -154,7 +154,7 @@ def create_crate():
     engine_dj_track_ids = request.json['engine_dj_track_ids']
 
     engine_dj_client.create_crate(crate_name, engine_dj_track_ids)
-    return jsonify(success=True)
+    return send_from_directory("/var/www/spengine", "m.db")
 
 @app.route('/user')
 def get_user_details():

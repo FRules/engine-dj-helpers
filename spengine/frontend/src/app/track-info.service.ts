@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpResponse} from '@angular/common/http';
 import { Track, Playlist } from './track-info.model';
-import {Observable, catchError, throwError} from 'rxjs';
+import {Observable, catchError, tap, throwError} from 'rxjs';
 import {API_URL} from '../env';
 import { ArtistTrackInfo } from './track-info/track-info.model';
 
@@ -39,6 +39,24 @@ export class TrackInfoService {
       'engine_dj_track_ids': engine_dj_track_ids
     }
 
-    return this.http.post(`${API_URL}/crate`, data, { observe: 'response'});
+    //return this.http.post(`${API_URL}/crate`, data, { observe: 'response'});
+
+    return this.http.post(`${API_URL}/crate`, data, { responseType: 'blob', observe: 'response' }).pipe(
+      tap((response: HttpResponse<Blob>) => {
+        if (response.body) {
+          const blob = new Blob([response.body], { type: 'application/octet-stream' });
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'm.db';  // Ersetze 'filename.ext' durch den gewünschten Dateinamen und die entsprechende Erweiterung
+          document.body.appendChild(a);
+          a.click();
+          window.URL.revokeObjectURL(url);
+          document.body.removeChild(a);
+        } else {
+          console.error('Response body is null');
+        }
+      })
+    );
   }
 }
