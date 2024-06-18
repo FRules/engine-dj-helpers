@@ -60,4 +60,4 @@ jobs:
       - name: Sts GetCallerIdentity
         run: |
           aws sts get-caller-identity
-          aws s3 cp frontend "s3://spengine-staging-bucket/test/" --sse --recursive
+          aws s3 cp frontend/browser "s3://spengine-staging-bucket/" --sse --recursive
