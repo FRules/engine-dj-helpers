@@ -15,8 +15,28 @@ from spotify_client import SpotifyClient
 from engine_dj_client import EngineDJClient
 
 
+def get_secret():
+    secret_name = "prod/spotify-api-credentials"
+    region_name = "eu-west-1"
+
+    # Create a Secrets Manager client
+    session = boto3.session.Session()
+    client = session.client(
+        service_name='secretsmanager',
+        region_name=region_name
+    )
+
+    get_secret_value_response = client.get_secret_value(
+        SecretId=secret_name
+    )
+
+    secret = json.loads(get_secret_value_response['SecretString'])
+    return secret["SPOTIFY_CLIENT_ID"], secret["SPOTIFY_CLIENT_SECRET"]
+
+
 app = Flask(__name__, static_folder='static')
 
+CLIENT_ID, CLIENT_SECRET = get_secret()
 
 engine_dj_client = EngineDJClient(
     "/var/www/spengine/m.db",
@@ -25,8 +45,7 @@ engine_dj_client = EngineDJClient(
 
 app.secret_key = '0D1EC4B0-18E9-49CA-999B-4745F921C370'
 
-CLIENT_ID = None
-CLIENT_SECRET = None
+spotify_client = SpotifyClient(session, CLIENT_ID, CLIENT_SECRET)
 REDIRECT_URI = 'https://domi-n.dev/callback'
 
 AUTH_URL = 'https://accounts.spotify.com/authorize'
@@ -220,26 +239,5 @@ def playlist_response_to_artist_track_info_array(playlist_response_json):
     
     return result
 
-
-def get_secret():
-    secret_name = "prod/spotify-api-credentials"
-    region_name = "eu-west-1"
-
-    # Create a Secrets Manager client
-    session = boto3.session.Session()
-    client = session.client(
-        service_name='secretsmanager',
-        region_name=region_name
-    )
-
-    get_secret_value_response = client.get_secret_value(
-        SecretId=secret_name
-    )
-
-    secret = json.loads(get_secret_value_response['SecretString'])
-    return secret["SPOTIFY_CLIENT_ID"], secret["SPOTIFY_CLIENT_SECRET"]
-
 if __name__ == '__main__':
-    CLIENT_ID, CLIENT_SECRET = get_secret()
-    spotify_client = SpotifyClient(session, CLIENT_ID, CLIENT_SECRET)
     app.run(host='0.0.0.0', port=5555, debug=True)
