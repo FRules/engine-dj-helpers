@@ -1,0 +1,9 @@
+table {
+    border-collapse:separate;
+    border:solid black 1px;
+    border-radius:6px;
+}
+
+.table-responsive {
+    max-height: 600px;
+}

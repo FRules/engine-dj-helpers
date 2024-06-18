@@ -1,0 +1,16 @@
+body, html {
+    height: 100%;
+  }
+
+  .bg {
+    /* The image used */
+    background: linear-gradient(rgba(255,255,255,.2), rgba(255,255,255,.2)), url("../assets/image.jpeg");
+  
+    /* Full height */
+    height: 100%;
+  
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }

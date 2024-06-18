@@ -1,0 +1,79 @@
+
+  <div class="container-fluid py-3">
+    <div class="row my-3">
+      <div class="col">
+        <div class="side-container" *ngIf="missingSongs && missingSongs.length > 0">
+            <div class="table-responsive">    
+            <table class="table table-sm">
+                <thead>
+                <tr class="table-danger">
+                    <th>#</th>
+                    <th>Artist</th>
+                    <th>Track</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (song of missingSongs; track song.artist; let  i = $index) {
+                    <tr class="table-danger">
+                        <td>{{i}}</td>
+                        <td>{{ song.artist }}</td>
+                    <td>{{ song.track }}</td>
+                    </tr>
+                  }
+                  </tbody>
+            </table>
+        </div>
+        </div>
+
+
+        scp -i ubuntu-spotify-engine-dj.pem /Users/Dominik_1/Music/Engine Library/Database2/m.db ubuntu@34.243.11.12:/home/ubuntu
+
+
+      </div>
+      <div class="col" align="center">
+        <p><a href="{{ API_URL + '/login' }}" class="btn btn-primary btn-block">Login with Spotify</a></p>
+
+        <div class="form-group">
+        <input type="text" class="form-control" placeholder="Playlist Link" [formControl]="playlistLink">
+        <input type="text" class="form-control" placeholder="Name of new Spotify Playlist" [formControl]="newPlaylistName">
+        <input type="text" class="form-control" placeholder="Name of new EngineDJ Crate" [formControl]="newCrateName">
+        <br>
+        <div class="btn-group-vertical">
+        <button type="button" class="btn btn-primary btn-block" (click)="comparePlaylistWithLibrary()">Compare Playlist with Library</button>
+        <button *ngIf="missingSongs && missingSongs.length > 0" 
+            type="button" class="btn btn-danger btn-block" 
+            (click)="createPlaylistInSpotify(missingSongs)">Create Spotify Playlist (missing tracks)</button>
+        <button  *ngIf="foundSongs && foundSongs.length > 0" 
+            type="button" class="btn btn-success btn-block"  
+            (click)="createPlaylistInSpotify(foundSongs)">Create Spotify Playlist (found tracks)</button>
+        <button  *ngIf="foundSongs && foundSongs.length > 0" 
+            type="button" class="btn btn-success btn-block"  
+            (click)="createFoundSongsCrateInEngineDJ()">Create EngineDJ Crate</button>
+            </div>
+    </div>
+      </div>
+      <div class="col">
+        <div class="side-container" *ngIf="foundSongs && foundSongs.length > 0">
+            <div class="table-responsive">
+            <table class="table table-responsive table-sm">
+                <thead>
+                <tr class="table-success">
+                    <th>#</th>
+                    <th>Artist</th>
+                    <th>Track</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (song of foundSongs; track song.artist; let  i = $index) {
+                    <tr class="table-success">
+                        <td>{{i}}</td>
+                        <td>{{ song.artist }}</td>
+                    <td>{{ song.track }}</td>
+                    </tr>
+                  }
+                  </tbody>
+            </table>
+        </div>
+        </div>
+      </div>
+    </div>
